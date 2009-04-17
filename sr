@@ -1,22 +1,8 @@
 #!/bin/bash
+host="$(sed 's/^@//' <<<"$@")"
 
-case $# in
-    1)
-	host=$1
-	;;
-    2)
-	host=$(host $1 | tail -n 1 | awk '{print $4}')
-	if [ "$host" == "found:" ]; then
-	    echo "Host $1 not found: 3(NXDOMAIN)"
-	    exit 1
-	fi
-	host=${host%.*}.$2
-	;;
-    *) 
-	echo "usage $0 HOST [PC]"
-	exit 1
-	;;
-esac
-
-echo "[${host}]"
-ssh -l root $host
+if [[ x"${TERM}" == x"screen" ]]; then
+    screen -t "${host}" ssh root@${host}
+else
+    ssh root@${host}
+fi
