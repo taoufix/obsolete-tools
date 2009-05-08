@@ -49,7 +49,7 @@ cd "${dir}"
 
 chap_url="http://www.onemanga.com/${manga}/${chapter}/"
 page_url=$(wget -U "${agent}" -q -O -  "${chap_url}" | sed -n 's/.\+href="\(.\+\)".\+Begin reading.\+/\1/p')
-url=$(wget -U "${agent}" -q -O - "http://www.onemanga.com/${page_url}"| grep -m 1 -o 'http://.*\.onemanga\.com/mangas/.*/.*/.*\.jpg')
+url=$(wget -U "${agent}" -q -O - "http://www.onemanga.com/${page_url}"| grep -m 1 -o 'http://.*\.onemanga\.com/.*\.jpg')
 url=${url%/*}
 images=$(wget -U "${agent}" -q -O - "http://www.onemanga.com/${page_url}" | egrep 'option value="..*"' | sed 's/.*value="\(.*\)".*/\1/')
 
