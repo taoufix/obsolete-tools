@@ -1,10 +1,6 @@
 #!/bin/bash
-#
-# Taoufik El Aoumari, taoufix@gmail.com
-# http://agafix.org, http://taoufix.googlepages.com
-#
-# August 2008
 
+_limit=100k
 agent="Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.3) Gecko/2008092510 Ubuntu/8.04 (hardy) Firefox/3.0.3 (Linux Mint)"
 
 case $# in
@@ -15,6 +11,7 @@ case $# in
             o) manga="One_Piece" ;;
             h) manga="Historys_Strongest_Disciple_Kenichi" ;;
             r) manga="Real" ;;
+	    y) manga="Yokohama_Kaidashi_Kikou";;
             *) cat >> /dev/stderr <<EOF
 Supported prefixes:
   n    Naruto
@@ -22,6 +19,7 @@ Supported prefixes:
   o    One Piece
   h    Historys Strongest Disciple Kenichi
   r    Real
+  y    Yokohama Kaidashi Kikou
 EOF
 		exit 1
 		;;
@@ -49,15 +47,12 @@ if [[ ! -d "${dir}" ]]; then
 fi
 cd "${dir}"
 
-ep_url="http://www.onemanga.com/${manga}/${chapter}/01"
-url=`wget -U "${agent}" -O - -q "${ep_url}" | grep -o 'http://.*\.onemanga\.com/mangas/.*/.*/.*\.jpg'`
+chap_url="http://www.onemanga.com/${manga}/${chapter}/"
+page_url=$(wget -U "${agent}" -q -O -  "${chap_url}" | sed -n 's/.\+href="\(.\+\)".\+Begin reading.\+/\1/p')
+url=$(wget -U "${agent}" -q -O - "http://www.onemanga.com/${page_url}"| grep -m 1 -o 'http://.*\.onemanga\.com/mangas/.*/.*/.*\.jpg')
 url=${url%/*}
+images=$(wget -U "${agent}" -q -O - "http://www.onemanga.com/${page_url}" | egrep 'option value="..*"' | sed 's/.*value="\(.*\)".*/\1/')
 
-images=$(wget -U "${agent}" -q -O - "${ep_url}" | egrep 'option value="..*"' | sed 's/.*value="\(.*\)".*/\1/')
-count=$(echo "${images}" | tail -n 1)
-
-i=1
 for img in ${images}; do
-    echo -e "Downloading $((i++))/${count}"
-    wget -U "${agent}" --limit-rate=10k -c "${url}/${img}.jpg"
+    wget -U "${agent}" --limit-rate=$_limit -c "${url}/${img}.jpg"
 done
