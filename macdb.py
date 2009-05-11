@@ -1,4 +1,7 @@
 #!/usr/bin/python
+# By:
+#     Taoufik El Aoumari aka taoufix
+#     Samir Khemiri
 
 import os, sqlite3, sys
 
