@@ -1,4 +1,7 @@
 #!/usr/bin/python
+# Version 0.2 2009.01.25
+# Copyright (c) 2009, Taoufik El Aoumari
+# Released under the GPL license http://www.gnu.org/licenses/gpl-3.0.txt
  
 import sys, re, zlib, os
  
