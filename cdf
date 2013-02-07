@@ -26,7 +26,7 @@ function bar() {
     echo
 }
 
-df -h | sed -e '1d' -e "/^\/dev\/mapper/N; s/\n//" | (
+df -h | sed -e '1d' -e "/^[^[:blank:]]*$/N; s/\n//" | (
     while true; do
 	read n
 	[[ $n == "" ]]   && exit
