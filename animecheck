@@ -1,6 +1,7 @@
 #!/usr/bin/python
-# Version 0.2 2009.01.25
+# Version 0.3 2014-01-19
 # Copyright (c) 2009, Taoufik El Aoumari
+# Copyright (c) 2014, Nevik Rehnel <hai.kataker@gmx.de>
 # Released under the GPL license http://www.gnu.org/licenses/gpl-3.0.txt
 
 import sys, re, zlib, os
@@ -9,6 +10,8 @@ c_null  = "\x1b[00;00m"
 c_red   = "\x1b[31;01m"
 c_green = "\x1b[32;01m"
 p_reset = "\x08"*8
+
+recursive = False
 
 def crc32_checksum(filename):
     crc = 0
@@ -35,7 +38,19 @@ def crc32_checksum(filename):
         crc &= 2**32-1
     return "%.8X" %(crc)
 
-for file in sys.argv[1:]:
+
+paths = sys.argv[1:]
+files = []
+for arg in paths:
+    if os.path.isfile(arg):
+        files.append(arg)
+    elif os.path.isdir(arg):
+        if recursive:
+            paths.extend([arg.rstrip('/\\') + '/' + item for item in os.listdir(arg)])
+        else:
+            files.extend([arg.rstrip('/\\') + '/' + item for item in os.listdir(arg) if os.path.isfile(arg.rstrip('/\\') + '/' + item)])
+
+for file in files:
     try:
         crc = crc32_checksum(file)
         parts = re.split("([a-fA-F0-9]{8})", file)
@@ -51,6 +66,6 @@ for file in sys.argv[1:]:
             print("%s   %s" % (crc, file))
     except(IndexError, ValueError):
         print(crc, "   ", file)
-    except (IOError, e):
+    except IOError as e:
         print(e)
         continue
