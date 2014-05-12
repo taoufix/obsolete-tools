@@ -4,12 +4,6 @@
 from time import sleep
 import curses, os, sys
 
-SERVERS=[
-  "srv1",
-  "srv2",
-  "srv3",
-  "srv4",
-]
 
 screen = curses.initscr()
 curses.noecho()
@@ -20,13 +14,37 @@ curses.init_pair(1,curses.COLOR_BLACK, curses.COLOR_WHITE)
 h = curses.color_pair(1)
 n = curses.A_NORMAL
 
+curses.init_pair(2,curses.COLOR_RED, curses.COLOR_BLACK)
+red = curses.color_pair(2)
+curses.init_pair(3,curses.COLOR_GREEN, curses.COLOR_BLACK)
+green = curses.color_pair(3)
+curses.init_pair(4,curses.COLOR_BLUE, curses.COLOR_BLACK)
+blue = curses.color_pair(4)
+curses.init_pair(5,curses.COLOR_YELLOW, curses.COLOR_BLACK)
+yellow = curses.color_pair(5)
+curses.init_pair(6,curses.COLOR_CYAN, curses.COLOR_BLACK)
+cyan = curses.color_pair(6)
+curses.init_pair(7,curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+magenta = curses.color_pair(7)
+
+SERVERS=[
+  {'srv': "srv1", 'color':red},
+  {'srv': "srv2", 'color':green},
+  {'srv': "srv3", 'color':yellow},
+  {'srv': "srv3", 'color':blue},
+  {'srv': "srv3", 'color':cyan},
+  {'srv': "srv3", 'color':magenta},
+  {'srv': "srv4", 'color': n},
+]
+
 MENU = "menu"
 COMMAND = "command"
 EXITMENU = "exitmenu"
+COLOR = "color"
 
 srv_list  = []
 for srv in SERVERS:
-  entry = { 'title': srv, 'type': COMMAND, 'command': "screen -t %s ssh %s" % (srv, srv)}
+  entry = { 'title': srv['srv'], 'type': COMMAND, 'command': "screen -t %s ssh %s" % (srv, srv), 'color':srv['color']}
   srv_list.append(entry)
 
 menu_data = {
@@ -59,9 +77,9 @@ def runmenu(menu, parent):
 
       # Display all the menu items, showing the 'pos' item highlighted
       for index in range(optioncount):
-        textstyle = n
+        textstyle = menu['options'][index]['color']
         if pos==index:
-          textstyle = h
+          textstyle = textstyle | curses.A_REVERSE
         screen.addstr(5+index,4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
       # Now display Exit/Return at bottom of menu
       textstyle = n
@@ -119,7 +137,6 @@ def clean_exit():
   screen.keypad(False)
   curses.echo()
   curses.endwin()
-
 
 # Main programe
 def main(screen):
