@@ -1,0 +1,70 @@
+<html>
+<header>
+	<meta charset="UTF-8">
+	<title>Co-workers</title>
+	<style>
+	.open-space, .office {
+		width: 800px;
+	}
+	.desk-row {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: flex-start;
+	}
+	.desk {
+		width: 200px;
+		height: 50px;
+		margin: 5px;
+		background-color: #F5E4DF;
+		text-align: center;
+		line-height: 50px;
+	}
+	.desk:nth-of-type(3) {
+		align-self: flex-end;
+		margin-right: 100px;
+	}
+	.front {
+		margin-top: 20px;
+	}
+	.back {
+		margin-bottom: 20px;
+	}
+	.front .desk  {
+	    border-bottom: 5px solid #d0c0b0;
+	}
+	.back .desk  {
+	    border-top: 5px solid #d0c0b0;
+	}
+	</style>
+</header>
+<body>
+
+<div class="open-space">
+
+	<div class="desk-row front">
+		<div class="desk">Onee</div>
+		<div class="desk">Two</div>
+		<div class="desk">Three</div>
+	</div> <!-- .desk-row.front -->
+
+	<div class="desk-row back">
+		<div class="desk"></div>
+		<div class="desk">Four</div>
+	</div> <!-- .desk-row.back -->
+
+	<div class="desk-row front">
+		<div class="desk">Five</div>
+		<div class="desk">Six</div>
+	</div> <!-- .desk-row.front -->
+
+
+</div> <!-- .open-space -->
+
+<div class="office">
+	<div class="desk-row back">
+		<div class="desk">Boss</div>
+	</div> <!-- .desk-row.front -->
+</div>
+
+</body>
+</html>
