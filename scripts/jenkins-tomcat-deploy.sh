@@ -45,9 +45,6 @@ fi
 R_USER="root"
 R_DEPLOY_LOCATION="/usr/local/pjee/${R_TOMCAT}/webapps"
 
-echo "hostname=$R_HOSTNAME tomcat=$R_TOMCAT context=$R_TARGET_WAR"
-exit 0
-
 ## FIND WAR
 WAR=`find "${WORKSPACE}" -name '*.war'`
 if (( $? == 0)); then
