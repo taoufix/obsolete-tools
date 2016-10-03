@@ -2,8 +2,12 @@
 
 EXEC="/cygdrive/c/MCS/apps/Sublime Text 3/subl.exe"
 
-if [[ "$1" =~ "/" ]]; then
-    cd "${1%/*}"
-fi
+DIR="${PWD}"
 
-"$EXEC" "${1##*/}"
+for f in "$@"; do
+    cd "${DIR}"
+    if [[ "$f" =~ "/" ]]; then
+        cd "${f%/*}"
+    fi
+    "$EXEC" "${f##*/}"
+done
